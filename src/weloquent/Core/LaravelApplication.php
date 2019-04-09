@@ -16,9 +16,9 @@ if (!defined('WPINC'))
 |
 */
 
-if ( ! extension_loaded('mcrypt'))
+if ( ! extension_loaded('openssl'))
 {
-	echo 'Mcrypt PHP extension required.'.PHP_EOL;
+	echo 'OpenSSL PHP extension required.'.PHP_EOL;
 
 	exit(1);
 }
