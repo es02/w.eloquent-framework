@@ -18,9 +18,28 @@ $vendor = str_replace(DS.'src', '', SRC_PATH);
 
 add_action('brain_init', function ($brain) use ($vendor)
 {
+    // Routing
 	if (file_exists($vendor . '/vendor/brain/cortex/src/BrainModule.php'))
 	{
 		$brain->addModule(new Brain\Cortex\BrainModule);
+	}
+
+    // Assets
+    if (file_exists($vendor . '/vendor/brain/occipital/src/BrainModule.php'))
+    {
+		$brain->addModule(new Brain\Occipital\BrainModule);
+	}
+
+    // Request
+    if (file_exists($vendor . '/vendor/brain/amygdala/src/BrainModule.php'))
+    {
+		$brain->addModule(new Brain\Amygdala\BrainModule);
+	}
+
+    // Hooks
+    if (file_exists($vendor . '/vendor/brain/striatum/src/BrainModule.php'))
+    {
+		$brain->addModule(new Brain\Striatum\BrainModule);
 	}
 });
 

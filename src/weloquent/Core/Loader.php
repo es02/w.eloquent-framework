@@ -38,10 +38,8 @@ abstract class Loader
 	 */
 	protected static function append($path)
 	{
-
 		if (is_dir($path))
 		{
-
 			$env = (is_admin()) ? 'admin' : 'front';
 
 			// from common path
@@ -84,11 +82,10 @@ abstract class Loader
 					static::$names[] = $file->getBasename('.php');
 
 					include_once $file->getPath() . DS . $file->getBasename();
-
 				}
 
 			}
 
 		}
 	}
-} 
+}

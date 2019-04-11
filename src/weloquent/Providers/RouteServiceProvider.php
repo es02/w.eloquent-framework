@@ -6,6 +6,7 @@ use Weloquent\Core\Http\Redirector;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
 use Weloquent\Core\Http\Router;
+use Illuminate\Http\Request;
 
 /**
  * RouteServiceProvider
@@ -58,17 +59,21 @@ class RouteServiceProvider extends ServiceProvider
 	 */
 	protected function registerUrlGenerator()
 	{
+        $request = new Request();
+        $this->app['request'] = $request->capture();
 		$this->app['url'] = $this->app->share(function($app)
 		{
 			// The URL generator needs the route collection that exists on the router.
 			// Keep in mind this is an object, so we're passing by references here
 			// and all the registered routes will be available to the generator.
 			$routes = $app['router']->getRoutes();
-
-			return new UrlGenerator($routes, $app->rebinding('request', function($app, $request)
+            $request = $app['request'];
+            $request = $app->rebinding('request', function($app, $request)
 			{
-				$app['url']->setRequest($request);
-			}));
+                $app['url']->setRequest($request);
+			});
+            // Request $request *should* inject the current http request, buuut it's not
+			return new UrlGenerator($routes, $request);
 		});
 	}
 
