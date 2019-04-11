@@ -10,16 +10,16 @@ class ConsoleSupportServiceProvider extends ServiceProvider {
 	 * @var array
 	 */
 	protected $providers = array(
-		'Illuminate\Foundation\Providers\CommandCreatorServiceProvider',
+//		'Illuminate\Foundation\Providers\CommandCreatorServiceProvider',
 		'Illuminate\Foundation\Providers\ComposerServiceProvider',
-		'Illuminate\Foundation\Providers\KeyGeneratorServiceProvider',
-		'Illuminate\Foundation\Providers\MaintenanceServiceProvider',
+//		'Illuminate\Foundation\Providers\KeyGeneratorServiceProvider',
+//		'Illuminate\Foundation\Providers\MaintenanceServiceProvider',
 		'Weloquent\Providers\OptimizeServiceProvider',
-		'Illuminate\Foundation\Providers\PublisherServiceProvider',
+//		'Illuminate\Foundation\Providers\PublisherServiceProvider',
 //		'Illuminate\Foundation\Providers\RouteListServiceProvider',
 //		'Illuminate\Foundation\Providers\ServerServiceProvider',
-		'Illuminate\Foundation\Providers\TinkerServiceProvider',
-		'Illuminate\Queue\FailConsoleServiceProvider',
+//		'Illuminate\Foundation\Providers\TinkerServiceProvider',
+//		'Illuminate\Queue\FailConsoleServiceProvider',
 	);
 
 	/**

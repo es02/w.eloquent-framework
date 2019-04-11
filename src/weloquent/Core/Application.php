@@ -18,21 +18,22 @@ class Application extends \Illuminate\Foundation\Application
 	 *
 	 * @var string
 	 */
-	const VERSION = '1.2.1';
-
-
-
+	const VERSION = '1.3.1';
 
 	/**
 	 * Alias to get App instance
 	 *
 	 * @return mixed
 	 */
-	public function getInstance()
+	public static function getInstance()
 	{
-		return $this;
+		return self;
 	}
 
+    public function configPath()
+    {
+        return dirname(ABSPATH) . '/app/config';
+    }
 
 	/**
 	 * Run the application and save headers.
@@ -47,10 +48,10 @@ class Application extends \Illuminate\Foundation\Application
 		 * On testing environment the WordPress helpers
 		 * will not have context. So we stop here.
 		 */
-		if(defined('WELOQUENT_TEST_ENV') && WELOQUENT_TEST_ENV)
-		{
-			return;
-		}
+         if(defined('WELOQUENT_TEST_ENV') && WELOQUENT_TEST_ENV)
+ 		{
+ 			return;
+ 		}
 
 		$request = $request ?: $this['request'];
 
@@ -114,8 +115,7 @@ class Application extends \Illuminate\Foundation\Application
 			'redirect'                 => 'Illuminate\Routing\Redirector',
 			'redis'                    => 'Illuminate\Redis\Database',
 			'request'                  => 'Illuminate\Http\Request',
-			'router'
-			=> 'Weloquent\Core\Http\Router',
+			'router'                   => 'Weloquent\Core\Http\Router',
 			'session'                  => 'Illuminate\Session\SessionManager',
 			'session.store'            => 'Illuminate\Session\Store',
 			'remote'                   => 'Illuminate\Remote\RemoteManager',
