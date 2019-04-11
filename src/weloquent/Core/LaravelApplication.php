@@ -33,9 +33,11 @@ if ( ! extension_loaded('openssl'))
 | as provides replacements for all mb_* and iconv type functions that
 | are not available by default in PHP. We'll setup this stuff here.
 |
+| Should be removed for Laravel 5
+|
 */
 
-Patchwork\Utf8\Bootup::initMbstring();
+// Patchwork\Utf8\Bootup::initMbstring();
 
 /*
 |--------------------------------------------------------------------------
@@ -50,14 +52,15 @@ Patchwork\Utf8\Bootup::initMbstring();
 
 use Weloquent\Core\Application;
 
-$app = new \Weloquent\Core\Application;
+$app = new \Weloquent\Core\Application(dirname(ABSPATH).'/app/');
 
 /**
  * -----------------------------------------------------
  * Set my custom request class
+ * Not used in Laravel 5
  * -----------------------------------------------------
  */
-Application::requestClass('Weloquent\Core\Http\Request');
+// Application::requestClass('Weloquent\Core\Http\Request');
 
 /*
 |--------------------------------------------------------------------------
@@ -82,8 +85,10 @@ $app['env'] = $env;
 | should not be changing these here. If you need to change these you
 | may do so within the paths.php file and they will be bound here.
 |
+| Removed in Laravel 5
+|
 */
-$app->bindInstallPaths(require SRC_PATH . '/bootstrap/paths.php');
+//$app->bindInstallPaths(require SRC_PATH . '/bootstrap/paths.php');
 
 /*
 |--------------------------------------------------------------------------
@@ -141,7 +146,6 @@ Facade::setFacadeApplication($app);
 */
 $app->registerCoreContainerAliases();
 
-
 /*
 |--------------------------------------------------------------------------
 | Register The Configuration Repository
@@ -152,16 +156,30 @@ $app->registerCoreContainerAliases();
 | separated by their concerns so they do not become really crowded.
 |
 */
-use Illuminate\Config\Repository as Config;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Config\FileLoader;
+use Illuminate\Foundation\Bootstrap\LoadConfiguration;
+// use Illuminate\Filesystem\Filesystem;
 
-$app->instance('config', $config = new Config(
+// $app->instance('config', $config = new Config(
+//
+// 	new FileLoader(new Filesystem, $app['path'] . '/config'), $env
+//
+// ));
 
-	new FileLoader(new Filesystem, $app['path'] . '/config'), $env
+// print_r($app);
 
-));
+$app->instance('path.config', app()->basePath() . DIRECTORY_SEPARATOR . 'config');
+$app->instance('path.storage', app()->basePath() . DIRECTORY_SEPARATOR . 'storage');
+$app->instance('path.theme', app()->basePath(). '/../src/themes/' . APP_THEME);
 
+$app->bind(\Illuminate\Contracts\Routing\UrlGenerator::class, function () {
+    $routes = new \Illuminate\Routing\RouteCollection();
+    $request = new \Illuminate\Http\Request();
+    return new \Illuminate\Routing\UrlGenerator($routes, $request);
+});
+
+
+$config = new LoadConfiguration();
+$config->Bootstrap($app);
 
 /*
 |--------------------------------------------------------------------------
@@ -172,11 +190,22 @@ $app->instance('config', $config = new Config(
 | which will provide a great output of exception details and a stack
 | trace in the case of exceptions while an application is running.
 |
+|
+| This changed with Laravel 5 and I'm not currently sure how to bootstrap it
+| so we'll leave it out for now
 */
 
-$app->startExceptionHandling();
+// $app->startExceptionHandling();
+ini_set('display_errors', 'On');
+if (!$app->config->get('app.debug')) {
+// if ($env != 'testing') {
+    // We *should* be able to define('WELOQUENT_TEST_ENV', true);
+    // in our main application and have it switch $env to testing however
+    // this doesn't seem to be the case;
+    // Probably a good thing however given that should break WP
 
-if ($env != 'testing') ini_set('display_errors', 'Off');
+    ini_set('display_errors', 'Off');
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -205,7 +234,6 @@ date_default_timezone_set($config['timezone']);
 */
 
 $aliases = $config['aliases'];
-
 use Illuminate\Foundation\AliasLoader;
 
 AliasLoader::getInstance($aliases)->register();
@@ -235,9 +263,7 @@ Request::enableHttpMethodParameterOverride();
 |
 */
 
-$providers = $config['providers'];
-
-$app->getProviderRepository()->load($app, $providers);
+$app->registerConfiguredProviders();
 
 $app->booted(function () use ($app, $env)
 {
@@ -260,6 +286,18 @@ $app->booted(function () use ($app, $env)
 	}
 });
 
-$app->run();
+// $app->run();
+
+// Kernel is instantiated elsewhere now - this will just crash laravel
+
+// $kernel = $app->make('Illuminate\Contracts\Http\Kernel');
+
+// $response = $kernel->handle(
+//     $request = Illuminate\Http\Request::capture()
+// );
+//
+// $response->send();
+//
+// $kernel->terminate($request, $response);
 
 return $app;
