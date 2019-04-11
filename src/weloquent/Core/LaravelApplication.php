@@ -4,8 +4,8 @@ use Weloquent\Core\Application;
 use Weloquent\Core\Http\Request;
 use Weloquent\Facades\Route;
 use Illuminate\Foundation\AliasLoader;
-use Illuminate\Support\Facades\Facade;
 use Illuminate\Foundation\Bootstrap\LoadConfiguration;
+use Illuminate\Support\Facades\Facade;
 
 // If this file is called directly, abort.
 if (!defined('WPINC'))
