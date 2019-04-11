@@ -22,6 +22,21 @@ add_action('brain_init', function ($brain) use ($vendor)
 	{
 		$brain->addModule(new Brain\Cortex\BrainModule);
 	}
+
+    if (file_exists($vendor . '/vendor/brain/occipital/src/BrainModule.php'))
+    {
+		$brain->addModule(new Brain\Occipital\BrainModule);
+	}
+
+    if (file_exists($vendor . '/vendor/brain/amygdala/src/BrainModule.php'))
+    {
+		$brain->addModule(new Brain\Amygdala\BrainModule);
+	}
+
+    if (file_exists($vendor . '/vendor/brain/striatum/src/BrainModule.php'))
+    {
+		$brain->addModule(new Brain\Striatum\BrainModule);
+	}
 });
 
 add_action('setup_theme', function ()
