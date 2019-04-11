@@ -18,7 +18,7 @@ class Application extends \Illuminate\Foundation\Application
 	 *
 	 * @var string
 	 */
-	const VERSION = '1.3.1';
+	const VERSION = '1.4.0';
 
 	/**
 	 * Alias to get App instance

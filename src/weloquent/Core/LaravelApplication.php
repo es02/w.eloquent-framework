@@ -279,6 +279,11 @@ $app->booted(function () use ($app, $env)
 	}
 });
 
+/**
+ * This technically should happen in App.php but that isn't actually getting
+ * called anywhere so, meh.
+ */
+
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
     App\Http\Kernel::class
