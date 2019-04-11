@@ -1,4 +1,10 @@
 <?php
+
+use Weloquent\Core\Application;
+use Weloquent\Facades\Route;
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Foundation\Bootstrap\LoadConfiguration;
+
 // If this file is called directly, abort.
 if (!defined('WPINC'))
 {
@@ -49,8 +55,6 @@ if ( ! extension_loaded('openssl'))
 | the IoC container for the system binding all of the various parts.
 |
 */
-
-use Weloquent\Core\Application;
 
 $app = new \Weloquent\Core\Application(dirname(ABSPATH).'/app/');
 
@@ -129,7 +133,6 @@ if (isset($unitTesting))
 | a mixtures of magic methods and facade derivatives. It's slick.
 |
 */
-use Illuminate\Support\Facades\Facade;
 
 Facade::clearResolvedInstances();
 
@@ -156,7 +159,6 @@ $app->registerCoreContainerAliases();
 | separated by their concerns so they do not become really crowded.
 |
 */
-use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 // use Illuminate\Filesystem\Filesystem;
 
 // $app->instance('config', $config = new Config(
@@ -171,6 +173,15 @@ $app->instance('path.config', app()->basePath() . DIRECTORY_SEPARATOR . 'config'
 $app->instance('path.storage', app()->basePath() . DIRECTORY_SEPARATOR . 'storage');
 $app->instance('path.theme', app()->basePath(). '/../src/themes/' . APP_THEME);
 
+/**
+ * This will be the cause of the routing issue I suspect.
+ *
+ * Route should probably be Weloquent\Facades\Route
+ * which should be bound to the route service provider
+ *
+ * Request should be bound to ??? I don't know
+ *
+ */
 $app->bind(\Illuminate\Contracts\Routing\UrlGenerator::class, function () {
     $routes = new \Illuminate\Routing\RouteCollection();
     $request = new \Illuminate\Http\Request();
